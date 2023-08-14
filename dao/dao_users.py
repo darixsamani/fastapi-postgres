@@ -14,28 +14,29 @@ def get_users(db: Session):
 
 
 def get_user_by_email(db: Session, email: EmailStr):
-    user = db.query(User).where(email=email)
+    user = db.query(User).filter(User.email==email).first()
     return user
-
+def get_user_by_id(db: Session, user_id: int):
+    user = db.query(User).get(user_id)
+    return user 
 def create_new_user(db: Session, user: UserCreate):
 
     user_db = User(email=user.email, fullname=user.fullname, password = hash_helper.encrypt(user.password))
-    db.add(user)
+    db.add(user_db)
     db.commit()
-    db.refresh()
+    db.refresh(user_db)
     return user_db
 
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(User).offset(skip).limit(limit).all()
 
+
 def delete_user(db: Session, user: User ):
 
     db.delete(user)
-    db.refresh()
+    db.commit()
+    return None
 
-def get_post_user(db: Session, id_user: int):
-    user_db = db.query(User).where(id=id_user)
-    user_posts = user_db.posts
-    return user_posts
+
 
     

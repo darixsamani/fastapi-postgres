@@ -13,7 +13,7 @@ def get_url():
     password = settings.POSTGRES_PASSWORD
     db = settings.POSTGRES_DB
     server = settings.POSTGRES_SERVER
-    return f"postgresql://{user}:{password}@{server}/{db}"
+    return f"postgresql://darix:darix@localhost:5432/darix"
 
 
 SQLALCHEMY_DATABASE_URL = get_url()

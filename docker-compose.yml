@@ -1,12 +1,20 @@
 version: "3"
 
 services:
-  web:
+  app:
     build: .
     ports:
-      - "8080:8080"
-    env_file:
-      - .env.dev
+      - "8081:8080"
+    # env_file:
+    #   - .env.dev
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=app
+      - POSTGRES_DB=app
+      - POSTGRES_SERVER=db
+      - PYTHONPATH=/app
 
   db:
     image: postgres:12.4

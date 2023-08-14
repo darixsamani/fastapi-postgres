@@ -11,7 +11,6 @@ class Post(Base):
     title: str = Column(String,)
     content: str = Column (String)
     user_id: int = Column(Integer, ForeignKey('users.id'))
-    post = relationship("Post", back_populates="users")
 
     def __repr__(self):
         return f'<Post "{self.content[:20]}...">'
