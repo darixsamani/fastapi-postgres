@@ -31,11 +31,10 @@ def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2Passwo
         try:
 
             password = hash_helper.verify(user_credentiel.password, user_exist.password)
-            print(f"password : {password}")
 
         except Exception as e:
-            print(f"Exception {e}")
             logging.error(e)
+            
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password 1")
 
 
