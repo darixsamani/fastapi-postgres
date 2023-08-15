@@ -3,10 +3,15 @@ import os
 
 class Settings():
 
+
+    #POSTGRESQL
     POSTGRES_USER: str = os.environ.get("POSTGRES_USER")
     POSTGRES_PASSWORD: str = os.environ.get("POSTGRES_PASSWORD")
     POSTGRES_DB: str = os.environ.get("POSTGRES_DB")
     POSTGRES_SERVER: str = os.environ.get("POSTGRES_SERVER")
+    POSTGRES_PORT: str  = os.environ.get("POSTGRES_PORT")
+
+    #REDIS
     redis_host: str = os.environ.get("REDIS_HOST")
     redis_port: str = os.environ.get("REDIS_PORT")
 

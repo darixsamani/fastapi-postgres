@@ -13,13 +13,13 @@ def get_users(db: Session):
     return users
 
 
-def get_user_by_email(db: Session, email: EmailStr):
+def get_user_by_email(db: Session, email: str):
     user = db.query(User).filter(User.email==email).first()
     return user
 
 def get_user_by_id(db: Session, user_id: int):
     user = db.query(User).filter(User.id==user_id).first()
-    return user 
+    return user
 
 
 def create_new_user(db: Session, user: UserCreate):

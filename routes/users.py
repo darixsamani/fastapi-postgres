@@ -9,7 +9,7 @@ from auth.deps import get_db
 from schemas.users import UserCreate
 from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from schemas.users import UserResponseModel
+from schemas.users import UserResponseModel, Token
 from typing import Union, List
 import logging
 from passlib.context import CryptContext
@@ -23,29 +23,30 @@ UserRouter = APIRouter()
 
 hash_helper = CryptContext(schemes=["bcrypt"])
 
-@UserRouter.post("/token")
-def get_acces_token(db: Session = Depends(get_db), user_credentials: UserSignIn = Body(...)):
-
-    user_exist = get_user_by_email(db=db, email=user_credentials.email)
-
+@UserRouter.post("/token", )
+def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2PasswordRequestForm = Depends())->dict:
+    
+    user_exist = get_user_by_email(db=db, email=user_credentiel.username)
     if user_exist:
         try:
-             password = hash_helper.verify(user_credentials.password, user_exist.password)
+
+            password = hash_helper.verify(user_credentiel.password, user_exist.password)
+            print(f"password : {password}")
 
         except Exception as e:
             print(f"Exception {e}")
             logging.error(e)
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password 1")
 
 
        
         if password:
 
-            return sign_jwt(email=user_credentials.email)
+            return sign_jwt(email=user_credentiel.username)
         
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Email or password 2")
     
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect Email or password 2")
 
 
 
@@ -53,7 +54,9 @@ def get_acces_token(db: Session = Depends(get_db), user_credentials: UserSignIn 
 @UserRouter.get("/{user_id}/posts", response_model=List[PostResponseModel])
 def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: User = Depends(get_current_user))-> List[PostResponseModel]:
 
-    print(f"user create : {user_create}")
+    print(f"{user_id} : {user_create.id}")
+    if user_id!=user_create.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="votre id ne correspond pas a celle de l'authentification")
     posts_user = get_post_user(db=db, user_id= user_id)
 
     if not posts_user:
@@ -88,11 +91,15 @@ def get_all_user(db: Session = Depends(get_db),skip: int = 0, limit: int = 100)-
 
     return get_users(db=db, skip=skip, limit=limit)
 
+
+
+
+
 @UserRouter.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db))->dict:
     
     user_db = get_user_by_id(db=db, user_id=id)
-    print(f"user : {user_db}")
+    print(f"user : {user_db.first()}")
     if user_db:
         raise HTTPException(status_code=400, detail="User not found")
     delete_user(db=db, user_id=user_id)

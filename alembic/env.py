@@ -8,11 +8,21 @@ from database.database import Base
 from models.posts import *
 from models.users import *
 from models import *
+from config.config import settings
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
+
+def get_url():
+    user = settings.POSTGRES_USER
+    password = settings.POSTGRES_PASSWORD
+    db = settings.POSTGRES_DB
+    server = settings.POSTGRES_SERVER
+    port = settings.POSTGRES_PORT
+    return f"postgresql://darix:darix@localhost:5432/darix"
 
 
 # Interpret the config file for Python logging.
@@ -48,7 +58,7 @@ def run_migrations_offline() -> None:
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=get_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

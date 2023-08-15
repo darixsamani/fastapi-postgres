@@ -22,7 +22,7 @@ def get_current_user(db: Session = Depends(get_db),  token :str = Depends(oauth2
     print(f"user exists : {users_exits}")
 
     if not users_exits:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email or PASSOWRD is incorrect")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     
     return get_user_by_email(db=db, email=users_exits["email"])
 
