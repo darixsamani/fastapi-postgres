@@ -16,9 +16,12 @@ def get_users(db: Session):
 def get_user_by_email(db: Session, email: EmailStr):
     user = db.query(User).filter(User.email==email).first()
     return user
+
 def get_user_by_id(db: Session, user_id: int):
-    user = db.query(User).get(user_id)
+    user = db.query(User).filter(User.id==user_id).first()
     return user 
+
+
 def create_new_user(db: Session, user: UserCreate):
 
     user_db = User(email=user.email, fullname=user.fullname, password = hash_helper.encrypt(user.password))

@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr
 from schemas.posts import PostResponseModel
 from typing import List
 
+
 class UserCreate(BaseModel):
     email:EmailStr
     fullname: str
@@ -11,6 +12,17 @@ class UserCreate(BaseModel):
 
 class UserResponseModel(UserCreate):
     id: int
-    posts: List[PostResponseModel]
+    
 
 
+class UserSignIn(BaseModel):
+    email: EmailStr
+    password: str
+
+    class Config:
+            orm_mode = True
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str

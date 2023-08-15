@@ -24,5 +24,5 @@ async def read_root():
     return {"message": "Welcome to this fantastic app."}
 
 
-app.include_router(UserRouter, tags=["Administrator"], prefix="/users")
-# app.include_router(PostRouter, tags=["Posts"], prefix="/posts", dependencies=[Depends(token_listener)],)
+app.include_router(UserRouter, tags=["USERS"], prefix="/users")
+app.include_router(PostRouter, tags=["Posts"], prefix="/posts", dependencies=[Depends(token_listener)],)
