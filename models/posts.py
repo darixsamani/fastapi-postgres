@@ -13,4 +13,4 @@ class Post(Base):
     user_id: int = Column(Integer, ForeignKey('users.id'))
 
     def __repr__(self):
-        return f'<Post {self.id} "{self.content[:20]}...">'
+        return f"<Post {self.id} {self.content[:20]}...>"

@@ -86,7 +86,7 @@ def create_new_users(user: UserCreate, db = Depends(get_db))-> UserResponseModel
 
 
 @UserRouter.get("", response_model=List[UserResponseModel])
-def get_all_user(db: Session = Depends(get_db),skip: int = 0, limit: int = 100)->List[UserResponseModel]:
+def get_all_user(db: Session = Depends(get_db), user: User = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
 
     return get_users(db=db, skip=skip, limit=limit)
 
@@ -95,13 +95,14 @@ def get_all_user(db: Session = Depends(get_db),skip: int = 0, limit: int = 100)-
 
 
 @UserRouter.delete("/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db))->dict:
-    
-    user_db = get_user_by_id(db=db, user_id=id)
-    print(f"user : {user_db.first()}")
-    if user_db:
-        raise HTTPException(status_code=400, detail="User not found")
-    delete_user(db=db, user_id=user_id)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
 
-    return {"detail": f"User with id {user_db.id} successfully deleted"}
+    user_ = get_user_by_id(db=db, user_id=user_id)
+    print(f"user : {user_}")
+    if not user_:
+        raise HTTPException(status_code=400, detail="User not found")
+    
+    delete_user(db=db, user=user_)
+
+    return {"detail": f"User with id {user_.id} successfully deleted"}
 

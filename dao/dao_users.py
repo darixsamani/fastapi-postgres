@@ -34,11 +34,10 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(User).offset(skip).limit(limit).all()
 
 
-def delete_user(db: Session, user: User ):
+def delete_user(db: Session, user):
 
     db.delete(user)
     db.commit()
-    return None
 
 
 

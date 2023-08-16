@@ -22,12 +22,10 @@ def create_new_post(post_create: PostCreate, db: Session = Depends(get_db), user
     return post
 
 
-@PostRouter.delete("{id_post}")
+@PostRouter.delete("/{id_post}")
 def delete_posts(id_post:int , db: Session = Depends(get_db), user_create: User = Depends(get_current_user)):
 
     post = get_post_by_id(db=db, post_id=id_post)
-
-    print(f"post : {post}")
 
     if not post:
 
