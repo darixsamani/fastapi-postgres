@@ -21,8 +21,7 @@ def get_url():
     password = os.getenv("POSTGRES_PASSWORD", "darix")
     server = os.getenv("POSTGRES_SERVER", "db")
     db = os.getenv("POSTGRES_DB", "darix")
-    port = os.getenv("POSTGRES_PORT", 5432)
-    return f"postgres://{user}:{password}@{server}:{port}/{db}"
+    return f"postgresql://{user}:{password}@{server}:5432"
 
 
 # Interpret the config file for Python logging.
@@ -76,11 +75,17 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+
+    configuration = config.get_section(config.config_ini_section)
+    configuration["sqlalchemy.url"] = get_url()
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
+        configuration, prefix="sqlalchemy.", poolclass=pool.NullPool,
     )
+    # connectable = engine_from_config(
+    #     config.get_section(config.config_ini_section, {}),
+    #     prefix="sqlalchemy.",
+    #     poolclass=pool.NullPool,
+    # )
 
     with connectable.connect() as connection:
         context.configure(

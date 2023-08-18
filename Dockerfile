@@ -4,7 +4,7 @@ WORKDIR /app
 ADD requirements.txt /app/requirements.txt
 
 RUN pip install --upgrade -r requirements.txt
-
+RUN pip install python-multipart
 
 COPY ./ /app
 

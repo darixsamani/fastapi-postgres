@@ -5,8 +5,7 @@ services:
     build: .
     ports:
       - "8081:8080"
-    # env_file:
-    #   - .env.dev
+    
     depends_on:
       - db
     environment:
@@ -19,8 +18,11 @@ services:
   db:
     image: postgres:12.4
     
+    ports:
+
+      - "8001:5432"
+    
     environment:
-        # if user, pass, and db changes, need to remove previous containers # docker-compose rm -vf
       - POSTGRES_USER=darix
       - POSTGRES_PASSWORD=darix
     volumes:
@@ -30,6 +32,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-volumes:
-  data:

@@ -26,6 +26,6 @@ def get_current_user(db: Session = Depends(get_db),  token :str = Depends(oauth2
     
     daoUser = DaoUser(db=db)
     
-    return daoUser.get_user_by_email(db=db, email=users_exits["email"])
+    return daoUser.get_user_by_email(email=users_exits["email"])
 
 
