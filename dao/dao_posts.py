@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from models.posts import Post
 from schemas.posts import PostCreate
-
+from database.database import SessionLocal
 
 
 class DaoPost():

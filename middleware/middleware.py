@@ -33,12 +33,17 @@ class CollectMiddleware(BaseHTTPMiddleware):
         query_parametre_request = request.query_params
         path_parametre_request = request.path_params
         cokies_request = request.cookies
-        # boby_request = await request.json()
-
+        accept = request.headers.get("accept")
+        content_type = request.headers.get('Content-Type')
         time = datetime.now()
 
-        content_type = request.headers.get('Content-Type')
-        print(f"content_type: {content_type}, \n client_host: {client_host},\n request_path : {request_path},\n request_methode: {request_methode },\n schema_request : {schema_request},\n header_request : {header_request},\n request_port : {request_port},\n query_parametre_request : {query_parametre_request},\n path_parametre_request : {path_parametre_request},\n cokies_request : {cokies_request},\n user_agent: {user_agent},\n host : {host},\n connection : {connection},\n referer : {referer},\n content_length : {content_length},\n accept-encoding : {accept_encoding},\n origin: {origin},\n")
+
+        # boby_request = await request.json()
+
+        
+
+        
+        print(f"content_type: {content_type}, \n client_host: {client_host},\n request_path : {request_path},\n request_methode: {request_methode },\n schema_request : {schema_request},\n header_request : {header_request},\n request_port : {request_port},\n query_parametre_request : {query_parametre_request},\n path_parametre_request : {path_parametre_request},\n cokies_request : {cokies_request},\n user_agent: {user_agent},\n host : {host},\n connection : {connection},\n referer : {referer},\n content_length : {content_length},\n accept-encoding : {accept_encoding},\n origin: {origin},\n accept : {accept}, \n")
         
         # process the request and get the response    
         response = await call_next(request)

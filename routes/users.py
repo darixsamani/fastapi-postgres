@@ -11,12 +11,10 @@ from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from schemas.users import UserResponseModel, Token
 from typing import Union, List
-import logging
 from passlib.context import CryptContext
 from auth.jwt_handler import sign_jwt
 from schemas.users import UserSignIn
 from schemas.posts import PostResponseModel
-
 from auth.deps import get_db, get_current_user
 
 UserRouter = APIRouter()
@@ -26,8 +24,7 @@ hash_helper = CryptContext(schemes=["bcrypt"])
 @UserRouter.post("/token", )
 def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2PasswordRequestForm = Depends())->dict:
     
-
-    daoUser = DaoUser(db)
+    daoUser = DaoUser(db=db)
     user_exist = daoUser.get_user_by_email(email=user_credentiel.username)
     if user_exist:
         try:
@@ -35,7 +32,7 @@ def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2Passwo
             password = hash_helper.verify(user_credentiel.password, user_exist.password)
 
         except Exception as e:
-            logging.error(e)
+            print(e)
             
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password 1")
 
@@ -58,7 +55,7 @@ def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: U
     print(f"{user_id} : {user_create.id}")
     if user_id!=user_create.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="votre id ne correspond pas a celle de l'authentification")
-    daoPost = DaoPost()
+    daoPost = DaoPost(db=db)
     posts_user = daoPost.get_post_user(user_id= user_id)
 
     if not posts_user:
@@ -72,8 +69,9 @@ def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: U
 
 
 @UserRouter.post("", response_model=UserResponseModel)
-def create_new_users(user: UserCreate, db = Depends(get_db))-> UserResponseModel:
-    daoUser = DaoUser(db)
+def create_new_users(user: UserCreate, db: Session = Depends(get_db))-> UserResponseModel:
+
+    daoUser = DaoUser(db=db)
 
     user_exists = daoUser.get_user_by_email(email=user.email)
 
@@ -91,7 +89,7 @@ def create_new_users(user: UserCreate, db = Depends(get_db))-> UserResponseModel
 
 @UserRouter.get("", response_model=List[UserResponseModel])
 def get_all_user(db: Session = Depends(get_db), user: User = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
-    daoUser = DaoUser(db)
+    daoUser = DaoUser(db=db)
     return daoUser.get_users(skip=skip, limit=limit)
 
 
@@ -100,7 +98,7 @@ def get_all_user(db: Session = Depends(get_db), user: User = Depends(get_current
 
 @UserRouter.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
-    daoUser = DaoUser(db)
+    daoUser = DaoUser(db=db)
     user_ = daoUser.get_user_by_id(user_id=user_id)
     print(f"user : {user_}")
     if not user_:

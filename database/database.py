@@ -14,7 +14,7 @@ def get_url():
     db = settings.POSTGRES_DB
     server = settings.POSTGRES_SERVER
     port = settings.POSTGRES_PORT
-    return f"postgresql://user:password@server:port/db"
+    return f"postgresql://user:password@server/db"
 
 
 SQLALCHEMY_DATABASE_URL = get_url()

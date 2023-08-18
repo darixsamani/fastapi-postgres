@@ -2,28 +2,27 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-import database
 from alembic import context
 from database.database import Base
 from models.posts import *
 from models.users import *
 from models import *
 from config.config import settings
-
+import os
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 
-def get_url():
-    user = settings.POSTGRES_USER
-    password = settings.POSTGRES_PASSWORD
-    db = settings.POSTGRES_DB
-    server = settings.POSTGRES_SERVER
-    port = settings.POSTGRES_PORT
-    return f"postgresql://user:password@server:port/db"
 
+def get_url():
+    user = os.getenv("POSTGRES_USER", "darix")
+    password = os.getenv("POSTGRES_PASSWORD", "darix")
+    server = os.getenv("POSTGRES_SERVER", "db")
+    db = os.getenv("POSTGRES_DB", "darix")
+    port = os.getenv("POSTGRES_PORT", 5432)
+    return f"postgres://{user}:{password}@{server}:{port}/{db}"
 
 
 # Interpret the config file for Python logging.
@@ -57,9 +56,10 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    # url = config.get_main_option("sqlalchemy.url")
+    url = get_url()
     context.configure(
-        url=get_url(),
+        url=url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},

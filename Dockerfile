@@ -4,15 +4,10 @@ WORKDIR /app
 ADD requirements.txt /app/requirements.txt
 
 RUN pip install --upgrade -r requirements.txt
-RUN pip install python-multipart
 
 
 COPY ./ /app
 
-
-
-EXPOSE 8080
-
-
+EXPOSE 8081
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]

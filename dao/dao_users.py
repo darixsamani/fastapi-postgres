@@ -4,18 +4,18 @@ from pydantic import EmailStr
 from passlib.context import CryptContext
 from schemas.users import UserCreate
 from models.users import User
+from database.database import SessionLocal
 
 hash_helper = CryptContext(schemes=["bcrypt"])
 
 
 
 
-def DaoUser():
+class DaoUser():
 
-    db: Session
+    db : Session
 
-    def __init__(self, db: Session):
-
+    def __init__(self, db: Session) -> None:
         self.db = db
 
     def get_users(self):
