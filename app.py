@@ -14,9 +14,6 @@ app.add_middleware(CollectMiddleware, redis_host="localhost", redis_port="6379")
 
 token_listener = JWTBearer()
 
-# FORMAT = '%(levelname)s: %(asctime)-15s: %(filename)s: %(funcName)s: %(module)s: %(message)s'
-# logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG, format=FORMAT)
-
 
 
 @app.get("/", tags=["Root"])

@@ -22,7 +22,8 @@ def get_url():
     db = settings.POSTGRES_DB
     server = settings.POSTGRES_SERVER
     port = settings.POSTGRES_PORT
-    return f"postgresql://darix:darix@localhost:5432/darix"
+    return f"postgresql://user:password@server:port/db"
+
 
 
 # Interpret the config file for Python logging.
@@ -58,7 +59,7 @@ def run_migrations_offline() -> None:
     """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=get_url(),
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
