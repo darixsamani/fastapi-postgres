@@ -8,36 +8,45 @@ from models.users import User
 hash_helper = CryptContext(schemes=["bcrypt"])
 
 
-def get_users(db: Session):
-    users = db.query(User).all()
-    return users
 
 
-def get_user_by_email(db: Session, email: str):
-    user = db.query(User).filter(User.email==email).first()
-    return user
+def DaoUser():
 
-def get_user_by_id(db: Session, user_id: int):
-    user = db.query(User).filter(User.id==user_id).first()
-    return user
+    db: Session
 
+    def __init__(self, db: Session):
 
-def create_new_user(db: Session, user: UserCreate):
+        self.db = db
 
-    user_db = User(email=user.email, fullname=user.fullname, password = hash_helper.encrypt(user.password))
-    db.add(user_db)
-    db.commit()
-    db.refresh(user_db)
-    return user_db
-
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(User).offset(skip).limit(limit).all()
+    def get_users(self):
+        users = self.db.query(User).all()
+        return users
 
 
-def delete_user(db: Session, user):
+    def get_user_by_email(self, email: str):
+        user = self.db.query(User).filter(User.email==email).first()
+        return user
 
-    db.delete(user)
-    db.commit()
+    def get_user_by_id(self, user_id: int):
+        user = self.db.query(User).filter(User.id==user_id).first()
+        return user
+
+
+    def create_new_user(self, user: UserCreate):
+        user_db = User(email=user.email, fullname=user.fullname, password = hash_helper.encrypt(user.password))
+        self.db.add(user_db)
+        self.db.commit()
+        self.db.refresh(user_db)
+        return user_db
+
+    def get_users(self, skip: int = 0, limit: int = 100):
+        return self.db.query(User).offset(skip).limit(limit).all()
+
+
+    def delete_user(self, user):
+
+        self.db.delete(user)
+        self.db.commit()
 
 
 

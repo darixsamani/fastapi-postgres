@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, Body, status
 from schemas.users import UserCreate
 from models.users import User
 from sqlalchemy.orm import Session
-from dao.dao_users import create_new_user, get_user_by_email, delete_user, get_user_by_id, get_users
-from dao.dao_posts import get_post_user
+from dao.dao_users import DaoUser
+from dao.dao_posts import DaoPost
 from sqlalchemy.orm import Session
 from auth.deps import get_db
 from schemas.users import UserCreate
@@ -26,7 +26,9 @@ hash_helper = CryptContext(schemes=["bcrypt"])
 @UserRouter.post("/token", )
 def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2PasswordRequestForm = Depends())->dict:
     
-    user_exist = get_user_by_email(db=db, email=user_credentiel.username)
+
+    daoUser = DaoUser(db)
+    user_exist = daoUser.get_user_by_email(email=user_credentiel.username)
     if user_exist:
         try:
 
@@ -56,7 +58,8 @@ def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: U
     print(f"{user_id} : {user_create.id}")
     if user_id!=user_create.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="votre id ne correspond pas a celle de l'authentification")
-    posts_user = get_post_user(db=db, user_id= user_id)
+    daoPost = DaoPost()
+    posts_user = daoPost.get_post_user(user_id= user_id)
 
     if not posts_user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User have not Post")
@@ -70,15 +73,16 @@ def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: U
 
 @UserRouter.post("", response_model=UserResponseModel)
 def create_new_users(user: UserCreate, db = Depends(get_db))-> UserResponseModel:
-    
-    user_exists = get_user_by_email(db=db, email=user.email)
+    daoUser = DaoUser(db)
+
+    user_exists = daoUser.get_user_by_email(email=user.email)
 
     if user_exists:
 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Email already registered")
     
-    user = create_new_user(db=db, user=user)
+    user = daoUser.create_new_user(user=user)
 
     return user
 
@@ -87,8 +91,8 @@ def create_new_users(user: UserCreate, db = Depends(get_db))-> UserResponseModel
 
 @UserRouter.get("", response_model=List[UserResponseModel])
 def get_all_user(db: Session = Depends(get_db), user: User = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
-
-    return get_users(db=db, skip=skip, limit=limit)
+    daoUser = DaoUser(db)
+    return daoUser.get_users(skip=skip, limit=limit)
 
 
 
@@ -96,13 +100,13 @@ def get_all_user(db: Session = Depends(get_db), user: User = Depends(get_current
 
 @UserRouter.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
-
-    user_ = get_user_by_id(db=db, user_id=user_id)
+    daoUser = DaoUser(db)
+    user_ = daoUser.get_user_by_id(user_id=user_id)
     print(f"user : {user_}")
     if not user_:
         raise HTTPException(status_code=400, detail="User not found")
     
-    delete_user(db=db, user=user_)
+    daoUser.delete_user(user=user_)
 
     return {"detail": f"User with id {user_.id} successfully deleted"}
 
