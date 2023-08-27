@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class PostCreate(BaseModel):
-    content : str
-    title: str
+    content : str = Field(examples=["le contenu du post"])
+    title: str = Field(examples=["le titre du post"])
 
 
 

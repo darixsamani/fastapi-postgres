@@ -1,27 +1,18 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 from schemas.posts import PostResponseModel
 from typing import List
 
 
 class UserCreate(BaseModel):
-    email:EmailStr
-    fullname: str
-    password: str
+    email:EmailStr = Field(examples=["samanidarix@gmail.com"])
+    fullname: str = Field(examples=["SAMANI SIEWE Darix"])
+    password: str = Field(examples=["6775212952"])
     
 
 
 class UserResponseModel(UserCreate):
-    id: int
+    id: int = Field(examples=[1])
     
-
-
-class UserSignIn(BaseModel):
-    email: EmailStr
-    password: str
-
-    class Config:
-            orm_mode = True
-
 
 class Token(BaseModel):
     access_token: str

@@ -13,7 +13,6 @@ from schemas.users import UserResponseModel, Token
 from typing import Union, List
 from passlib.context import CryptContext
 from auth.jwt_handler import sign_jwt
-from schemas.users import UserSignIn
 from schemas.posts import PostResponseModel
 from auth.deps import get_db, get_current_user
 
