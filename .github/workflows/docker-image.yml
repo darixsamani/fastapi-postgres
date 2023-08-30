@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+     
+      run: |
+        git_hash=$(git rev-parse --short HEAD)
+        docker logout
+        echo ${{ secrets.DOCKER_PASSWORD }}| docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker build -t fastapipostgresql .
+        docker tag fastapipostgresql:latest darixsamani/fastapipostgresql:$git_hash
+        docker push darixsamani/fastapipostgresql:$git_hash
