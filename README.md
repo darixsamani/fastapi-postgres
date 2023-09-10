@@ -19,7 +19,7 @@ After cloning the repository, go to it.
  2. RUN FRIST MIGRATION
       ```
       docker-compose exec app alembic revision --autogenerate -m "first migration"
-      docker-compose exex app alembic upgrade head
+      docker-compose exec app alembic upgrade head
       ```
  3. Please turn on the LISTEN Docs app. `0.0.0.0:8081/docs`
 
