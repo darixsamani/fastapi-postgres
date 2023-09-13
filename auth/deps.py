@@ -4,7 +4,7 @@ from database.database import SessionLocal
 from auth.jwt_handler import decode_jwt
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.exceptions import HTTPException
-from dao.dao_users import  DaoUser
+from database.dao.dao_users import  DaoUser
 
 def get_db():
     db = SessionLocal()

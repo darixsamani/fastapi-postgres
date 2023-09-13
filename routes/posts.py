@@ -4,7 +4,7 @@ from auth.deps import get_db, get_current_user
 from schemas.posts import PostCreate
 from models.users import User
 from fastapi import HTTPException
-from dao.dao_posts import DaoPost
+from database.dao.dao_posts import DaoPost
 from schemas.posts import PostResponseModel
 
 PostRouter = APIRouter()

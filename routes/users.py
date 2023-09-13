@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, Body, status
 from schemas.users import UserCreate
 from models.users import User
 from sqlalchemy.orm import Session
-from dao.dao_users import DaoUser
-from dao.dao_posts import DaoPost
+from database.dao.dao_posts import DaoPost
+from database.dao.dao_users import DaoUser
 from sqlalchemy.orm import Session
 from auth.deps import get_db
 from schemas.users import UserCreate
