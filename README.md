@@ -23,5 +23,12 @@ After cloning the repository, go to it.
       ```
  3. Please turn on the LISTEN Docs app. `0.0.0.0:8081/docs`
 
- 4. EXAMPLE
+
+
+ 4. PGADMIN4
+   access to pgadmin by specified db as name server and 5434 as port at localhost/5050
+   username: admin@gmail.com
+   password: admin
+ 
+ 5. EXAMPLE
     ![IMAGE](./img/img.png)
