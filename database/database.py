@@ -11,9 +11,10 @@ dotenv.load_dotenv()
 def get_url():
     user = os.getenv("POSTGRES_USER", "darix")
     password = os.getenv("POSTGRES_PASSWORD", "darix")
-    server = os.getenv("POSTGRES_SERVER", "db")
+    server = os.getenv("POSTGRES_SERVER", "localhost")
     db = os.getenv("POSTGRES_DB", "darix")
-    return f"postgresql://{user}:{password}@{server}:5432"
+    port = os.getenv("POSTGRES_PORT", 5432)
+    return f"postgresql://{user}:{password}@{server}:{port}/{db}"
 
 
 SQLALCHEMY_DATABASE_URL = get_url()
