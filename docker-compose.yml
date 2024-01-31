@@ -5,6 +5,8 @@ services:
     build: .
     ports:
       - "8081:8080"
+
+    command: bash -c "alembic upgrade head"
     
     depends_on:
       - db
@@ -25,6 +27,7 @@ services:
     environment:
       - POSTGRES_USER=darix
       - POSTGRES_PASSWORD=darix
+      - POSTGRES_DB=darix
     volumes:
       - ./db_data:/var/lib/postgresql/data
     healthcheck:
