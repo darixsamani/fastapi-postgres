@@ -2,13 +2,14 @@
 Template for building FastAPI applications with PostgreSQL
 
 # Features
- - Python FastAPI backend.
+ - Python FastAPI backend
  - POSTGRESQL Database
  - Docker-Compose
  - Authentification
  - Migration with Alembic
+ - PGADMIN4 for Graphical Database Visualization
 
-## Here are the steps to follow in order to run the program: 
+## Here are the steps to follow to run the program: 
 After cloning the repository, go to it. 
  1. DOCKER COMPOSE
     ```
