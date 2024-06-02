@@ -1,5 +1,5 @@
 # FASTAPI-POSTGRESQL
-Template for building FastAPI applications with PostgreSQL
+Template for building FastAPI Asynchronous applications with PostgreSQL
 
 # Features
  - Python FastAPI backend
@@ -8,6 +8,7 @@ Template for building FastAPI applications with PostgreSQL
  - Authentification
  - Migration with Alembic
  - PGADMIN4 for Graphical Database Visualization
+ - Asynchronous
 
 ## Here are the steps to follow to run the program: 
 After cloning the repository, go to it. 
