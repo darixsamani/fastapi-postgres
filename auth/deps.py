@@ -1,31 +1,31 @@
 from fastapi import Depends, status
-from sqlalchemy.orm import Session
-from database.database import SessionLocal
+from sqlalchemy.ext.asyncio import AsyncSession
+from database.database import AsyncSessionLocal
 from auth.jwt_handler import decode_jwt
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.exceptions import HTTPException
 from database.dao.dao_users import  DaoUser
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token")
 
-def get_current_user(db: Session = Depends(get_db),  token :str = Depends(oauth2_scheme)):
+async def get_current_user(db: AsyncSession = Depends(get_db),  token :str = Depends(oauth2_scheme)):
 
     users_exits = decode_jwt(token=token)
-
-    print(f"user exists : {users_exits}")
 
     if not users_exits:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     
     daoUser = DaoUser(db=db)
+
+    user = await daoUser.get_user_by_email(email=users_exits["email"])
+
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     
-    return daoUser.get_user_by_email(email=users_exits["email"])
+    return user
 
 

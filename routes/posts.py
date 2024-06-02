@@ -1,38 +1,39 @@
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.ext.asyncio import AsyncSession
 from auth.deps import get_db, get_current_user
 from schemas.posts import PostCreate
 from models.users import User
 from fastapi import HTTPException
 from database.dao.dao_posts import DaoPost
+from database.dao.dao_users import DaoUser
 from schemas.posts import PostResponseModel
 
 PostRouter = APIRouter()
 
 
 @PostRouter.post("", response_model=PostResponseModel)
-def create_new_post(post_create: PostCreate, db: Session = Depends(get_db), user_create: User = Depends(get_current_user)):
-    print(f"user : {user_create}")
+async def create_new_post(post_create: PostCreate, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+
     daoPost = DaoPost(db=db)
-    post = daoPost.create_post(post_create=post_create, user_id=user_create.id)
+    daoUser = DaoUser(db=db)
+    post = await daoPost.create_post(post_create=post_create, user_id=user.id)
 
     if not post:
-
         raise HTTPException(status_code=403, detail="unable to create post")
 
     return post
 
 
 @PostRouter.delete("/{id_post}")
-def delete_posts(id_post:int , db: Session = Depends(get_db), user_create: User = Depends(get_current_user)):
+async def delete_posts(id_post:int,  db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
     daoPost = DaoPost(db=db)
 
-    post = daoPost.get_post_by_id(post_id=id_post)
+    post_exist = await daoPost.get_post_by_id(post_id=id_post)
 
-    if not post:
+    if not post_exist:
 
-        raise HTTPException(status_code=403, detail="Post don't exists")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Post don't exists")
 
-    daoPost.delete_post(post=post)
+    await daoPost.delete_post(post=post_exist)
 
-    return {"detail": f"Post with id {post.id} successfully deleted"}
+    return HTTPException(status_code=status.HTTP_200_OK, detail=f"Post with id: {post_exist.id} successfully deleted")

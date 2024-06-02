@@ -1,41 +1,45 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.future import select
 from models.posts import Post
 from schemas.posts import PostCreate
-from database.database import SessionLocal
+from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class DaoPost():
 
-    db : Session
+    db : AsyncSession
 
 
-    def __init__(self, db: Session):
+    def __init__(self, db: AsyncSession):
         self.db = db
 
     
-    def get_post_user(self, user_id: int):
-        posts_user = self.db.query(Post).filter(Post.user_id==user_id).all()
-        return posts_user
+    async def get_post_user(self, user_id: int):
+        result = await self.db.execute(select(Post).where(Post.user_id == user_id))
+        posts = result.scalars()
+        return posts
 
-    def get_post_by_id(self, post_id: int):
-        post = self.db.query(Post).filter(Post.id==post_id).first()
+    async def get_post_by_id(self, post_id: int):
+        result = await self.db.execute(select(Post).where(Post.id == post_id))
+        post = result.scalar_one_or_none()
         return post
 
-    def get_post_by_user_id(self, user_id:int):
-        post = self.db.query(Post).filter(Post.user_id==user_id).first()
-        return post
+    async def get_post_by_user_id(self, user_id:int):
+
+        result = await self.db.execute(select(Post).filter(Post.user_id == user_id))
+        posts = result.scalars()
+        return posts
 
 
 
-    def create_post(self, post_create:PostCreate, user_id: int):
+    async def create_post(self, post_create:PostCreate, user_id: int):
         post = Post(title=post_create.title, content=post_create.content, user_id=user_id)
         self.db.add(post)
-        self.db.commit()
-        self.db.refresh(post)
+        await self.db.commit()
+        await self.db.refresh(post)
     
         return post
 
-    def delete_post(self, post: Post):
+    async def delete_post(self, post: Post):
 
-        self.db.delete(post)
-        self.db.commit()
+        await self.db.delete(post)
+        await self.db.commit()

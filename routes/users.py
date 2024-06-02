@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, Body, status
 from schemas.users import UserCreate
 from models.users import User
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from database.dao.dao_posts import DaoPost
 from database.dao.dao_users import DaoUser
-from sqlalchemy.orm import Session
 from auth.deps import get_db
 from schemas.users import UserCreate
 from fastapi.exceptions import HTTPException
@@ -21,10 +20,10 @@ UserRouter = APIRouter()
 hash_helper = CryptContext(schemes=["bcrypt"])
 
 @UserRouter.post("/token", )
-def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2PasswordRequestForm = Depends())->dict:
+async def get_acces_token(db: AsyncSession = Depends(get_db), user_credentiel: OAuth2PasswordRequestForm = Depends())->dict:
     
     daoUser = DaoUser(db=db)
-    user_exist = daoUser.get_user_by_email(email=user_credentiel.username)
+    user_exist = await daoUser.get_user_by_email(email=user_credentiel.username)
     if user_exist:
         try:
 
@@ -48,14 +47,13 @@ def get_acces_token(db: Session = Depends(get_db), user_credentiel: OAuth2Passwo
 
 
 
-@UserRouter.get("/{user_id}/posts", response_model=List[PostResponseModel])
-def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: User = Depends(get_current_user))-> List[PostResponseModel]:
+@UserRouter.get("/{user_id}/posts")
+async def get_all_posts_user(user_id:int, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user))-> List[PostResponseModel]:
 
-    print(f"{user_id} : {user_create.id}")
-    if user_id!=user_create.id:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="votre id ne correspond pas a celle de l'authentification")
+    if user_id!=user.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="your id does not match that of the authentication")
     daoPost = DaoPost(db=db)
-    posts_user = daoPost.get_post_user(user_id= user_id)
+    posts_user =  await daoPost.get_post_user(user_id= user_id)
 
     if not posts_user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User have not Post")
@@ -67,43 +65,42 @@ def get_all_posts_user(user_id:int, db:Session = Depends(get_db), user_create: U
 
 
 
-@UserRouter.post("", response_model=UserResponseModel)
-def create_new_users(user: UserCreate, db: Session = Depends(get_db))-> UserResponseModel:
+@UserRouter.post("", response_model= UserResponseModel)
+async def create_new_users(user: UserCreate, db: AsyncSession = Depends(get_db))-> UserResponseModel:
 
     daoUser = DaoUser(db=db)
 
-    user_exists = daoUser.get_user_by_email(email=user.email)
+    user_exists = await daoUser.get_user_by_email(email=user.email)
 
-    if user_exists:
+    if not user_exists:
 
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Email already registered")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     
-    user = daoUser.create_new_user(user=user)
+    user_create = await daoUser.create_new_user(user=user)
 
-    return user
+    return user_create
 
 
 
 
 @UserRouter.get("", response_model=List[UserResponseModel])
-def get_all_user(db: Session = Depends(get_db), user: User = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
+async def get_all_user(db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
     daoUser = DaoUser(db=db)
-    return daoUser.get_users(skip=skip, limit=limit)
+    return await daoUser.get_users(skip=skip, limit=limit)
 
 
 
 
 
 @UserRouter.delete("/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db)):
+async def delete_user(user_id: int, db: AsyncSession = Depends(get_db)):
     daoUser = DaoUser(db=db)
-    user_ = daoUser.get_user_by_id(user_id=user_id)
-    print(f"user : {user_}")
-    if not user_:
+    user_exist = await daoUser.get_user_by_id(user_id=user_id)
+   
+    if not user_exist:
         raise HTTPException(status_code=400, detail="User not found")
     
-    daoUser.delete_user(user=user_)
+    await daoUser.delete_user(user=user_exist)
 
-    return {"detail": f"User with id {user_.id} successfully deleted"}
+    return HTTPException(status_code=200, detail=f"User with id {user_exist.id} successfully deleted")
 

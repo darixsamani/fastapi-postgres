@@ -1,7 +1,8 @@
 import dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from typing import Callable
 from config.config import settings
 import os
 
@@ -14,14 +15,17 @@ def get_url():
     server = os.getenv("POSTGRES_SERVER", "localhost")
     db = os.getenv("POSTGRES_DB", "darix")
     port = os.getenv("POSTGRES_PORT", 5432)
-    return f"postgresql://{user}:{password}@{server}:{port}/{db}"
+    return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
 
 
 SQLALCHEMY_DATABASE_URL = get_url()
 
 print(f"SQLALCHEMY_DATABASE_URL : {SQLALCHEMY_DATABASE_URL}")
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+engine = create_async_engine(SQLALCHEMY_DATABASE_URL)
+
+
+AsyncSessionLocal: Callable[[], AsyncSession] = async_sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
 
 Base = declarative_base()
 

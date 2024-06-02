@@ -1,10 +1,11 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.future import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from models.users import User
 from pydantic import EmailStr
 from passlib.context import CryptContext
 from schemas.users import UserCreate
 from models.users import User
-from database.database import SessionLocal
+import asyncio
 
 hash_helper = CryptContext(schemes=["bcrypt"])
 
@@ -13,40 +14,45 @@ hash_helper = CryptContext(schemes=["bcrypt"])
 
 class DaoUser():
 
-    db : Session
+    db : AsyncSession
 
-    def __init__(self, db: Session) -> None:
+    def __init__(self, db: AsyncSession) -> None:
         self.db = db
 
-    def get_users(self):
+    async def get_users(self):
         users = self.db.query(User).all()
         return users
 
 
-    def get_user_by_email(self, email: str):
-        user = self.db.query(User).filter(User.email==email).first()
+    async def get_user_by_email(self, email: str):
+
+        result = await self.db.execute(select(User).where(User.email == email))
+        user = result.scalar_one_or_none()
         return user
 
-    def get_user_by_id(self, user_id: int):
-        user = self.db.query(User).filter(User.id==user_id).first()
+    async def get_user_by_id(self, user_id: int):
+        result = await self.db.execute(select(User).where(User.id == user_id))
+        user = result.scalar_one_or_none()
         return user
 
 
-    def create_new_user(self, user: UserCreate):
+    async def create_new_user(self, user: UserCreate):
         user_db = User(email=user.email, fullname=user.fullname, password = hash_helper.encrypt(user.password))
         self.db.add(user_db)
-        self.db.commit()
-        self.db.refresh(user_db)
+        await self.db.commit()
+        await self.db.refresh(user_db)
         return user_db
 
-    def get_users(self, skip: int = 0, limit: int = 100):
-        return self.db.query(User).offset(skip).limit(limit).all()
+    async def get_users(self, skip: int = 0, limit: int = 100):
+        result = await self.db.execute(select(User).offset(skip).limit(limit))
+        users = result.scalars()
+        return users
 
 
-    def delete_user(self, user):
+    async def delete_user(self, user):
 
-        self.db.delete(user)
-        self.db.commit()
+        await self.db.delete(user)
+        await self.db.commit()
 
 
 
