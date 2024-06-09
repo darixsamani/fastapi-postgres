@@ -4,11 +4,11 @@ WORKDIR /app
 ADD pyproject.toml /app/pyproject.toml
 
 RUN pip install pipx
-RUN pix install poetry
+RUN pipx install poetry
 RUN poetry install
 
 COPY ./ /app
 
 EXPOSE 8000
 
-CMD ["poetry", "run"
+CMD ["poetry", "run", "fastapi", "run", "app.py"]
