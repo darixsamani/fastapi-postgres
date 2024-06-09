@@ -1,13 +1,14 @@
 FROM python:3.8
 WORKDIR /app
 
-ADD requirements.txt /app/requirements.txt
+ADD pyproject.toml /app/pyproject.toml
 
-RUN pip install --upgrade -r requirements.txt
-RUN pip install python-multipart
+RUN pip install pipx
+RUN pix install poetry
+RUN poetry install
 
 COPY ./ /app
 
-EXPOSE 8081
+EXPOSE 8000
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["poetry", "run"
