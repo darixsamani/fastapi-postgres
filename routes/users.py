@@ -72,7 +72,7 @@ async def create_new_users(user: UserCreate, db: AsyncSession = Depends(get_db))
 
     user_exists = await daoUser.get_user_by_email(email=user.email)
 
-    if not user_exists:
+    if user_exists:
 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     
