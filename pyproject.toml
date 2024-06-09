@@ -17,6 +17,7 @@ python-dotenv = "^1.0.1"
 asyncpg = "^0.29.0"
 pyjwt = "^2.8.0"
 passlib = "^1.7.4"
+python-multipart = "^0.0.9"
 
 
 [build-system]
