@@ -1,13 +1,15 @@
-FROM python:3.8
+FROM python:3.13
 WORKDIR /app
 
 ADD pyproject.toml /app/pyproject.toml
 
-RUN pip install poetry
-RUN poetry install
-
+RUN pip install uv
+RUN uv venv
+RUN uv pip install .
+RUN uv pip install bcrypt
+RUN uv pip install "passlib[bcrypt]"
 COPY ./ /app
 
 EXPOSE 8000
 
-CMD ["poetry", "run", "fastapi", "run", "app.py"]
+CMD ["uv", "run", "main.py"]

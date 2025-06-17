@@ -1,12 +1,8 @@
-version: "3"
-
 services:
   app:
     build: .
     ports:
       - "8081:8080"
-
-    command: bash -c "alembic upgrade head"
     
     depends_on:
       - db
