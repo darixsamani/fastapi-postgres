@@ -1,16 +1,13 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import Relationship
 from database.database import Base
-from sqlalchemy.orm import relationship
+from sqlmodel import Field, SQLModel
 
-class Post(Base):
 
-    __tablename__ = "posts"
+class Posts(SQLModel, table=True):
 
-    id: int = Column(Integer, primary_key=True, index=True)
-    title: str = Column(String,)
-    content: str = Column (String)
-    user_id: int = Column(Integer, ForeignKey('users.id'))
+    id: int = Field(default=None, primary_key=True)
+    title: str 
+    content: str 
+    user_id: int = Field(default=None, foreign_key='users.id')
 
     def __repr__(self):
         return f"<Post {self.id} {self.content[:20]}...>"

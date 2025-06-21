@@ -11,9 +11,11 @@ dependencies = [
     "dotenv>=0.9.9",
     "fastapi>=0.115.12",
     "passlib[bcrypt]>=1.7.4",
+    "psycopg2-binary>=2.9.10",
     "pydantic[email]>=2.11.7",
     "pyjwt>=2.10.1",
     "python-dotenv>=1.1.0",
     "python-multipart>=0.0.20",
+    "sqlmodel>=0.0.24",
     "uvicorn>=0.34.3",
 ]

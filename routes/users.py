@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Body, status
 from schemas.users import UserCreate
-from models.users import User
+from models.users import Users
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.dao.dao_posts import DaoPost
 from database.dao.dao_users import DaoUser
@@ -48,7 +48,7 @@ async def get_acces_token(db: AsyncSession = Depends(get_db), user_credentiel: O
 
 
 @UserRouter.get("/{user_id}/posts")
-async def get_all_posts_user(user_id:int, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user))-> List[PostResponseModel]:
+async def get_all_posts_user(user_id:int, db: AsyncSession = Depends(get_db), user: Users = Depends(get_current_user))-> List[PostResponseModel]:
 
     if user_id!=user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="your id does not match that of the authentication")
@@ -84,7 +84,7 @@ async def create_new_users(user: UserCreate, db: AsyncSession = Depends(get_db))
 
 
 @UserRouter.get("", response_model=List[UserResponseModel])
-async def get_all_user(db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
+async def get_all_user(db: AsyncSession = Depends(get_db), user: Users = Depends(get_current_user), skip: int = 0, limit: int = 100)->List[UserResponseModel]:
     daoUser = DaoUser(db=db)
     return await daoUser.get_users(skip=skip, limit=limit)
 

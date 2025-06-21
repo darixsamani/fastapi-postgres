@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from auth.deps import get_db, get_current_user
 from schemas.posts import PostCreate
-from models.users import User
+from models.users import Users
 from fastapi import HTTPException
 from database.dao.dao_posts import DaoPost
 from database.dao.dao_users import DaoUser
@@ -12,7 +12,7 @@ PostRouter = APIRouter()
 
 
 @PostRouter.post("", response_model=PostResponseModel)
-async def create_new_post(post_create: PostCreate, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+async def create_new_post(post_create: PostCreate, db: AsyncSession = Depends(get_db), user: Users = Depends(get_current_user)):
 
     daoPost = DaoPost(db=db)
     daoUser = DaoUser(db=db)
@@ -25,7 +25,7 @@ async def create_new_post(post_create: PostCreate, db: AsyncSession = Depends(ge
 
 
 @PostRouter.delete("/{id_post}")
-async def delete_posts(id_post:int,  db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)):
+async def delete_posts(id_post:int,  db: AsyncSession = Depends(get_db), user: Users = Depends(get_current_user)):
     daoPost = DaoPost(db=db)
 
     post_exist = await daoPost.get_post_by_id(post_id=id_post)
