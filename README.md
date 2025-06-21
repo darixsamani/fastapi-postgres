@@ -9,6 +9,7 @@ Template for building FastAPI Asynchronous applications with PostgreSQL
  - Migration with Alembic
  - PGADMIN4 for Graphical Database Visualization
  - Asynchronous
+ - Support SQLmodel
 
 ## Here are the steps to follow to run the program: 
 After cloning the repository, go to it. 
@@ -20,10 +21,10 @@ After cloning the repository, go to it.
 
  2. RUN FRIST MIGRATION
       ```
-      docker compose exec app alembic revision --autogenerate -m "first migration"
-      docker compose exec app alembic upgrade head
+      docker compose exec app uv run alembic revision --autogenerate -m "first migration"
+      docker compose exec app uv run alembic upgrade head
       ```
- 3. Please turn on the LISTEN Docs app. `0.0.0.0:8000/docs`
+ 3. Please turn on the LISTEN Docs app. `0.0.0.0:8001/docs`
 
 
 
@@ -33,6 +34,8 @@ After cloning the repository, go to it.
    
    username: admin@gmail.com
    password: admin
+
+   Please turn on the LISTEN Docs app. `0.0.0.0:5050`
  
  5. EXAMPLE
     ![IMAGE](./img/img.png)
