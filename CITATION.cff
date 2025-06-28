@@ -1,0 +1,24 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: fastapi-postgres
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Darix
+    family-names: SAMANI SIEWE
+    email: samanidarix@gmail.com
+    orcid: 'https://orcid.org/0009-0001-0794-7120'
+repository-code: 'https://github.com/darixsamani/fastapi-postgres'
+abstract: >-
+  Template for building FastAPI Asynchronous applications
+  with PostgreSQL(SQLModel)
+keywords:
+  - fastapi
+  - sqlmodel
+  - postgres
+  - asynchronous
+license: MIT
