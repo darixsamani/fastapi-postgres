@@ -3,7 +3,7 @@
 This is a template for building **asynchronous FastAPI applications** with **PostgreSQL**.
 
 If you're looking to understand the project in depth, please refer to the full documentation here:  
-👉 [Deep Documentation](https://deepwiki.com/darixsamani/)
+👉 [Deep Documentation](https://deepwiki.com/darixsamani/fastapi-postgres)
 
 
 # Features
