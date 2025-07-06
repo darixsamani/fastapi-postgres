@@ -1,5 +1,10 @@
-# FASTAPI-POSTGRESQL
-Template for building FastAPI Asynchronous applications with PostgreSQL
+# FastAPI Async Template with PostgreSQL
+
+This is a template for building **asynchronous FastAPI applications** with **PostgreSQL**.
+
+If you're looking to understand the project in depth, please refer to the full documentation here:  
+👉 [Deep Documentation](https://deepwiki.com/darixsamani/)
+
 
 # Features
  - Python FastAPI backend
