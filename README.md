@@ -1,5 +1,12 @@
 # 🚀 FastAPI Async Template with PostgreSQL
 
+[![FastAPI](https://img.shields.io/badge/FastAPI-async%20framework-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Deployed%20With-Docker-2496ED?style=flat&logo=docker)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Status](https://img.shields.io/badge/Status-Stable-success)]()
+
+
 Welcome to the **FastAPI Async Template** — a clean and modern starter for building **asynchronous APIs** powered by **FastAPI** ⚡ and **PostgreSQL** 🐘.
 
 Dive deeper into the full project documentation here:  
