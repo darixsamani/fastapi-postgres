@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD: str = os.environ.get("POSTGRES_PASSWORD", "6775212952")
     POSTGRES_DB: str = os.environ.get("POSTGRES_DB", "fastapi_postgres")
     POSTGRES_SERVER: str = os.environ.get("POSTGRES_SERVER", "localhost")
-    POSTGRES_PORT: str  = os.environ.get("POSTGRES_PORT", 5432)
+    POSTGRES_PORT: int  = os.environ.get("POSTGRES_PORT", 5432)
 
 
 
