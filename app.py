@@ -6,11 +6,18 @@ from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await engine.connect()
-    yield
-    # You can also close DB connections here if needed
-    print("App shutdown complete.")
+    print("🚀 App starting...")
+
+    # ✅ Properly open a connection context
+    async with engine.begin() as conn:
+        # optional: run startup scripts (like create_all)
+        pass
+
+    yield  # App is running
+
+    print("🧹 App shutting down...")
     await engine.dispose()
+    print("✅ App shutdown complete.")
 
 
 app = FastAPI(lifespan=lifespan, description="Template for building FastAPI applications with PostgreSQL", contact={"email": "samanidarix@gmail.com"})
