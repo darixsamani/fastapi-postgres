@@ -1,19 +1,19 @@
 import os
+import dotenv
+from pydantic_settings import Bas
+
+dotenv.load_dotenv()
 
 
 class Settings():
 
 
     #POSTGRESQL
-    POSTGRES_USER: str = os.environ.get("POSTGRES_USER")
-    POSTGRES_PASSWORD: str = os.environ.get("POSTGRES_PASSWORD")
-    POSTGRES_DB: str = os.environ.get("POSTGRES_DB")
-    POSTGRES_SERVER: str = os.environ.get("POSTGRES_SERVER")
-    POSTGRES_PORT: str  = os.environ.get("POSTGRES_PORT")
-
-    #REDIS
-    redis_host: str = os.environ.get("REDIS_HOST")
-    redis_port: str = os.environ.get("REDIS_PORT")
+    POSTGRES_USER: str = os.environ.get("POSTGRES_USER", "darix")
+    POSTGRES_PASSWORD: str = os.environ.get("POSTGRES_PASSWORD", "6775212952")
+    POSTGRES_DB: str = os.environ.get("POSTGRES_DB", "fastapi_postgres")
+    POSTGRES_SERVER: str = os.environ.get("POSTGRES_SERVER", "localhost")
+    POSTGRES_PORT: str  = os.environ.get("POSTGRES_PORT", 5432)
 
 
 
@@ -24,7 +24,7 @@ class Settings():
 
     class Config:
         env_file = ".env.dev"
-        orm_mode = True
+        from_attributes = True
 
 
 settings = Settings()

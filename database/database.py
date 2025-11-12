@@ -1,4 +1,3 @@
-import dotenv
 from sqlmodel import SQLModel
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -7,15 +6,13 @@ from typing import Callable
 from config.config import settings
 import os
 
-dotenv.load_dotenv()
-
 
 def get_url():
-    user = os.getenv("POSTGRES_USER", "darix")
-    password = os.getenv("POSTGRES_PASSWORD", "darix")
-    server = os.getenv("POSTGRES_SERVER", "localhost")
-    db = os.getenv("POSTGRES_DB", "darix")
-    port = os.getenv("POSTGRES_PORT", 5432)
+    user = settings.POSTGRES_USER
+    password = settings.POSTGRES_PASSWORD
+    server = settings.POSTGRES_SERVER
+    db = settings.POSTGRES_DB
+    port = settings.POSTGRES_PORT
     return f"postgresql+asyncpg://{user}:{password}@{server}:{port}/{db}"
 
 
