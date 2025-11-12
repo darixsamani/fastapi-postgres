@@ -1,11 +1,11 @@
 import os
 import dotenv
-from pydantic_settings import Bas
+from pydantic_settings import BaseSettings
 
 dotenv.load_dotenv()
 
 
-class Settings():
+class Settings(BaseSettings):
 
 
     #POSTGRESQL
