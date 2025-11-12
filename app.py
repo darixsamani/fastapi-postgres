@@ -2,20 +2,18 @@ from routes.posts import  PostRouter
 from routes.users import  UserRouter
 from fastapi import FastAPI
 from database.database import engine
+from contextlib import asynccontextmanager
 
-
-app = FastAPI(description="Template for building FastAPI applications with PostgreSQL", contact={"email": "samanidarix@gmail.com"})
-
-
-
-
-@app.on_event("startup")
-async def startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     await engine.connect()
+    yield
+    # You can also close DB connections here if needed
+    print("App shutdown complete.")
+    await engine.dispose()
 
-@app.on_event("shutdown")
-async def shutdown():
-   await engine.dispose()
+
+app = FastAPI(lifespan=lifespan, description="Template for building FastAPI applications with PostgreSQL", contact={"email": "samanidarix@gmail.com"})
 
 
 
