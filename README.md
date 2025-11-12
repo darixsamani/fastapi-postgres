@@ -28,6 +28,37 @@ Dive deeper into the full project documentation here:
 
 ---
 
+## 🐘 Run PostgreSQL Instance (via Docker)
+
+Start a local PostgreSQL instance with Docker:
+
+
+```bash
+docker run -d \
+  --name salvo_postgres \
+  -e POSTGRES_USER=darix \
+  -e POSTGRES_PASSWORD=6775212952 \
+  -e POSTGRES_DB=salvo_postgres \
+  -p 5432:5432 \
+  postgres:latest
+```
+
+## 🧠 Run Application
+
+Before running the application, make sure that uv (the ultra-fast Python package and environment manager) is installed on your system 🧩
+
+⚙️ Install uv (if not installed yet):
+
+```bash
+pip install uv
+```
+
+Once installed, you can easily run your FastAPI app with a single command 💨
+
+```bash
+uv run main.py
+```
+
 ## 🧭 Quick Start Guide
 
 Follow these simple steps to get your app running in no time ⏱️
