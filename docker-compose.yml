@@ -15,7 +15,7 @@ services:
       - PYTHONPATH=/app
 
   db:
-    image: postgres:12.4
+    image: postgres:latest
     
     ports:
 
