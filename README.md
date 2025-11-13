@@ -60,7 +60,14 @@ Once installed, you can easily run your FastAPI app with a single command 💨
 uv run main.py
 ```
 
-## 🧭 Quick Start Guide
+### 🌐 Access the API Docs
+
+Open the FastAPI interactive docs at:
+👉 [http://0.0.0.0:8080/docs](http://0.0.0.0:8080/docs)
+
+
+
+## 🧭 Quick Start Guide To Deply With Docker
 
 Follow these simple steps to get your app running in no time ⏱️
 
@@ -83,7 +90,7 @@ docker compose exec app uv run alembic upgrade head
 ### 🌐 3. Access the API Docs
 
 Open the FastAPI interactive docs at:
-👉 [http://0.0.0.0:8001/docs](http://0.0.0.0:8001/docs)
+👉 [http://0.0.0.0:8081/docs](http://0.0.0.0:8081/docs)
 
 
 
